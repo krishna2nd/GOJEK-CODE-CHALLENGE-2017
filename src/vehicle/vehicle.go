@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package vehicle implements a simple vehicle objct handling package.
+// Package vehicle implements a simple vehicle object handling package.
 // It defines a type, Vehicle,
 // New method will be accepting vehicle number and Color properties
 // GetColour(), GetNumber() Defined to access properties independently.
