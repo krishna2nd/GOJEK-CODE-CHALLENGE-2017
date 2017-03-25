@@ -54,3 +54,12 @@ func (this *Vehicle) GetColour() string {
 func (this *Vehicle) GetNumber() string {
 	return this.Number
 }
+
+// Chech object equality
+//  @params: ({*Object} Vehicle)
+//  @return:
+//		Number: bool
+func (this *Vehicle) IsEquals(vehicle *Vehicle) bool {
+	return this.Number == vehicle.GetNumber() &&
+		this.GetColour() == vehicle.GetColour()
+}

@@ -9,6 +9,7 @@
 package slot
 
 import (
+	. "ptypes"
 	"vehicle"
 	"perror"
 )
@@ -19,7 +20,7 @@ const SlotNumberLowerLimit = 1
 // Slot defines a Number and a Vehicle.
 // If vehicle object is allocated then slot is used
 type Slot struct {
-	Number  uint64
+	Number  Index
 	Vehicle *vehicle.Vehicle
 }
 
@@ -46,7 +47,7 @@ func (this *Slot) init() *Slot {
 //		err: error
 //		Slot: *Object
 
-func (this *Slot) SetNumber(number uint64) (error, *Slot) {
+func (this *Slot) SetNumber(number Index) (error, *Slot) {
 	if number < SlotNumberLowerLimit {
 		return perror.ErrSlotNumberInvalid, this
 	}
