@@ -4,6 +4,21 @@ as well as commands in interactive mode.
 Even though you provide a command file it operate and provide a prompt to user to 
 operate further instead of operate and quit
 
+#### Application build requirements
+    go1.8, golint are required binaries. Executable permission enabled for 
+`parking_lot`. Please make sure its in executable mode in your system
+    Run 
+    `chmod 755 parking_lot`
+    in command prompt if not.
+   Please make sure your  ***GOPATH*** is set to application directory
+   or set as folows.
+   
+   ***cd [solution directory]***
+   
+   ***export GOPATH=$(pwd)***
+   
+    Run above commands in your shell
+   
 Application includes following components
 
 1. Vehicle
