@@ -6,9 +6,9 @@
 // It defines a type, Vehicle,
 // New method will be accepting vehicle number and Color properties
 // GetColour(), GetNumber() Defined to access properties independently.
-
 package vehicle
 
+// Vehicle stores number and Color of vehicle
 type Vehicle struct {
 	// Number and Color is defined as string
 	// eg
@@ -17,7 +17,7 @@ type Vehicle struct {
 	Number, Color string
 }
 
-// Package based New Object creation function
+// New - Package based New Object creation function
 //  @params:
 //      Number: string
 //      Color: string
@@ -27,39 +27,39 @@ func New(number, color string) *Vehicle {
 	return new(Vehicle).Init(number, color)
 }
 
-// Initialise created object
+// Init - Initialise created object
 //  @params:
 //      Number: string
 //      Color: string
 //  @return:
 //		Vehicle: *Object
-func (this *Vehicle) Init(number, color string) *Vehicle {
-	this.Color = color
-	this.Number = number
-	return this
+func (v *Vehicle) Init(number, color string) *Vehicle {
+	v.Color = color
+	v.Number = number
+	return v
 }
 
-// Get value of colour vehicle property
+// GetColour -  Get value of colour vehicle property
 //  @params: (void)
 //  @return:
 //		Color: String
-func (this *Vehicle) GetColour() string {
-	return this.Color
+func (v *Vehicle) GetColour() string {
+	return v.Color
 }
 
-// Get value of vehicle number property
+// GetNumber - Get value of vehicle number property
 //  @params: (void)
 //  @return:
 //		Number: String
-func (this *Vehicle) GetNumber() string {
-	return this.Number
+func (v *Vehicle) GetNumber() string {
+	return v.Number
 }
 
-// Chech object equality
+// IsEquals - check object equality
 //  @params: ({*Object} Vehicle)
 //  @return:
 //		Number: bool
-func (this *Vehicle) IsEquals(vehicle *Vehicle) bool {
-	return this.Number == vehicle.GetNumber() &&
-		this.GetColour() == vehicle.GetColour()
+func (v *Vehicle) IsEquals(vehicle *Vehicle) bool {
+	return v.Number == vehicle.GetNumber() &&
+		v.GetColour() == vehicle.GetColour()
 }

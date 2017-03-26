@@ -1,67 +1,81 @@
+// Copyright 2017 Krishna Kumar. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+// Package parking manages the complete logic of a parking center
+// Create, Add Vehicle, Remove vehicle, Search, Status Report etc.
 package parking
 
 import (
-	. "perror"
-	. "ptypes"
+	"perror"
+	"ptypes"
 	"slot"
 	"vehicle"
 )
-
-type ParkingCenter struct {
-	Capacity Capacity
+// Center object holds the config of all required properties
+type Center struct {
+	Capacity ptypes.Capacity
 	Counter,
 	startIndex,
-	allocationIndex Index
+	allocationIndex ptypes.Index
 	slots []*slot.Slot
 }
 
-func New(start Index, capacity Capacity) *ParkingCenter {
-	return new(ParkingCenter).
+// New parking center instance
+func New(start ptypes.Index, capacity ptypes.Capacity) *Center {
+	return new(Center).
 		init(start, capacity)
 }
-
-func (this *ParkingCenter) init(start Index, capacity Capacity) *ParkingCenter {
-	this.Capacity = capacity
-	this.allocationIndex = 0
-	this.startIndex = start
-	this.slots = make([]*slot.Slot, uint64(capacity))
-	for idx, _ := range this.slots {
-		this.slots[idx] = slot.New()
-		this.slots[idx].SetNumber(start)
+// init parking center instance
+func (pc *Center) init(
+	start ptypes.Index,
+	capacity ptypes.Capacity) *Center {
+	pc.Capacity = capacity
+	pc.allocationIndex = 0
+	pc.startIndex = start
+	pc.slots = make([]*slot.Slot, uint64(capacity))
+	for idx := range pc.slots {
+		pc.slots[idx] = slot.New()
+		pc.slots[idx].SetNumber(start)
 		start = start + 1
 	}
-	return this
+	return pc
 }
 
-func (this *ParkingCenter) findNextFreeSlot() (error, *slot.Slot) {
-	for _, objSlot := range this.slots {
+// findNextFreeSlot to get next free slot
+func (pc *Center) findNextFreeSlot() (*slot.Slot, error) {
+	for _, objSlot := range pc.slots {
 		if objSlot.IsFree() {
-			return nil, objSlot
+			return objSlot, nil
 		}
 	}
-	return ErrParkingFullCapacity, nil
+	return nil, perror.ErrParkingFullCapacity
 }
 
-func (this *ParkingCenter) allotedAll() bool {
-	return !(uint64(this.Capacity) >= uint64(this.allocationIndex)+1)
+// allotedAll to check all slots are allocated at least once or not
+func (pc *Center) allotedAll() bool {
+	return !(uint64(pc.Capacity) >= uint64(pc.allocationIndex)+1)
 }
 
-func (this *ParkingCenter) nextSlot() (error, *slot.Slot) {
-	objSlot := this.slots[this.allocationIndex]
-	this.allocationIndex = this.allocationIndex + 1
-	return nil, objSlot
+// nextSlot get next free slot
+func (pc *Center) nextSlot() (*slot.Slot, error) {
+	objSlot := pc.slots[pc.allocationIndex]
+	pc.allocationIndex = pc.allocationIndex + 1
+	return objSlot, nil
 }
 
-func (this *ParkingCenter) getFreeSlot() (error, *slot.Slot) {
-	if !this.allotedAll() {
-		return this.nextSlot()
+// getFreeSlot get next serial slot or free in between
+func (pc *Center) getFreeSlot() (*slot.Slot, error) {
+	if !pc.allotedAll() {
+		return pc.nextSlot()
 	}
-	return this.findNextFreeSlot()
+	return pc.findNextFreeSlot()
 }
 
-func (this *ParkingCenter) getAllFreeSlot() []*slot.Slot {
+// getAllFreeSlot get all free slots serial and in between
+func (pc *Center) getAllFreeSlot() []*slot.Slot {
 	freeSlots := make([]*slot.Slot, 0)
-	for _, s := range this.slots {
+	for _, s := range pc.slots {
 		if s.IsFree() {
 			freeSlots = append(freeSlots, s)
 		}
@@ -69,70 +83,76 @@ func (this *ParkingCenter) getAllFreeSlot() []*slot.Slot {
 	return freeSlots
 }
 
-func (this *ParkingCenter) AddVehicle(vehicle *vehicle.Vehicle) (error, *slot.Slot) {
+// AddVehicle add vehicle to parking center
+func (pc *Center) AddVehicle(vehicle *vehicle.Vehicle) (*slot.Slot, error) {
 	var (
 		err     error
 		objSlot *slot.Slot
 	)
 
-	err, objSlot = this.getFreeSlot()
+	objSlot, err = pc.getFreeSlot()
 	if err == nil && objSlot != nil {
-		err, objSlot = objSlot.Allocate(vehicle)
+		objSlot, err = objSlot.Allocate(vehicle)
 		if err == nil {
-			this.Counter = this.Counter + 1
+			pc.Counter = pc.Counter + 1
 		}
 	}
-	return err, objSlot
+	return objSlot, err
 }
 
-func (this *ParkingCenter) remove(s *slot.Slot) {
+// remove remove vehicle from center and decrement counter
+func (pc *Center) remove(s *slot.Slot) {
 	s.Free()
-	this.Counter = this.Counter - 1
+	pc.Counter = pc.Counter - 1
 }
 
-func (this *ParkingCenter) RemoveVehicle(vehicle *vehicle.Vehicle) (error, []*slot.Slot) {
+// RemoveVehicle remove vehicle from center slot list by vehicle object
+func (pc *Center) RemoveVehicle(vehicle *vehicle.Vehicle) ([]*slot.Slot, error) {
 	var arrSlots = make([]*slot.Slot, 0)
-	for _, s := range this.slots {
+	for _, s := range pc.slots {
 		v := s.GetVehicle()
 		if nil != v && v.IsEquals(vehicle) {
-			this.remove(s)
+			pc.remove(s)
 			arrSlots = append(arrSlots, s)
 		}
 	}
-	return nil, arrSlots
+	return arrSlots, nil
 }
 
-func (this *ParkingCenter) RemoveVehicleByNumber(number string) (error, []*slot.Slot) {
-	_, oSlots := this.GetSlotsBy("number", number)
-	for _, v := range oSlots {
-		this.remove(v)
+// RemoveVehicleByNumber remove vehicle from center slot list by vehicle number
+func (pc *Center) RemoveVehicleByNumber(number string) ([]*slot.Slot, error) {
+	slots, err := pc.GetSlotsBy("number", number)
+	for _, v := range slots {
+		pc.remove(v)
 	}
-	return nil, oSlots
+	return slots, err
 }
 
-func (this *ParkingCenter) RemoveVehicleBySlotNumber(Number Index) (error, *slot.Slot) {
-	err, oSlot := this.GetSlot(Number)
+// RemoveVehicleBySlotNumber  remove slot from center slot list by slot number
+func (pc *Center) RemoveVehicleBySlotNumber(Number ptypes.Index) (*slot.Slot, error) {
+	oSlot, err := pc.GetSlot(Number)
 	if nil != err {
-		return err, oSlot
+		return oSlot, err
 	}
-	
-	this.remove(oSlot)
-	
-	return nil, oSlot
+
+	pc.remove(oSlot)
+	return oSlot, nil
 }
 
-func (this *ParkingCenter) GetSlot(Number Index) (error, *slot.Slot) {
-	if (Number) < (Index(this.Capacity) + this.startIndex) &&
-		Number >= this.startIndex {
-		return nil, this.slots[Number - this.startIndex]
+// GetSlot from center slot list by vehicle number
+func (pc *Center) GetSlot(Number ptypes.Index) (*slot.Slot, error) {
+	if (Number) < (ptypes.Index(pc.Capacity) + pc.startIndex) &&
+		Number >= pc.startIndex {
+		return pc.slots[Number - pc.startIndex], nil
 	}
-	return ErrInvalidGetSlotNumber, nil
+	return nil, perror.ErrInvalidGetSlotNumber
 }
 
-func (this *ParkingCenter) GetSlotsBy(property, value string) (error, []*slot.Slot) {
+// GetSlotsBy vehicle property { number, color }
+func (pc *Center) GetSlotsBy(property, value string) ([]*slot.Slot, error) {
 	var arrSlots = make([]*slot.Slot, 0)
 	var val string
-	for _, s := range this.slots {
+	for _, s := range pc.slots {
 		v := s.GetVehicle()
 		if nil != v {
 			switch property {
@@ -148,5 +168,5 @@ func (this *ParkingCenter) GetSlotsBy(property, value string) (error, []*slot.Sl
 			}
 		}
 	}
-	return nil, arrSlots
+	return arrSlots, nil
 }

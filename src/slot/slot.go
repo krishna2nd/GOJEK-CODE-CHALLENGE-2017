@@ -5,26 +5,25 @@
 // Package slot implements a simple slot object for vehicles.
 // It defines a type Slot with following methods.
 // SetNumber(), IsValid(), Allocate(), ISFree(), Free(), GetVehicle()
-
 package slot
 
 import (
-	. "ptypes"
+	"ptypes"
 	"vehicle"
-	. "perror"
+	"perror"
 )
 
-// Slot lower boundry defined as a constant.
+// SlotNumberLowerLimit is slot lower bound defined as a constant.
 const SlotNumberLowerLimit = 1
 
 // Slot defines a Number and a Vehicle.
 // If vehicle object is allocated then slot is used
 type Slot struct {
-	Number  Index
+	Number  ptypes.Index
 	Vehicle *vehicle.Vehicle
 }
 
-// Package based New Object creation function
+// New Slot Object creation function
 //  @return:
 //		Slot: *Object
 func New() *Slot {
@@ -34,99 +33,91 @@ func New() *Slot {
 // initialise Object with default values
 //  @return:
 //		Slot: *Object
-func (this *Slot) init() *Slot {
-	this.Number = SlotNumberLowerLimit - 1
-	this.Vehicle = nil
-	return this
+func (sl *Slot) init() *Slot {
+	sl.Number = SlotNumberLowerLimit - 1
+	sl.Vehicle = nil
+	return sl
 }
 
-// Set Slot number to slot object
+// SetNumber Set slot number to slot object
 //  @params:
 //      number: string
 //  @return:
-//		err: error
 //		Slot: *Object
-
-func (this *Slot) SetNumber(number Index) (error, *Slot) {
+//		err: error
+func (sl *Slot) SetNumber(number ptypes.Index)(*Slot, error) {
 	if !IsValidSlotNumber(number) {
-		return ErrSlotNumberInvalid, this
+		return sl, perror.ErrSlotNumberInvalid
 	}
-	this.Number = number
-	return nil, this
+	sl.Number = number
+	return sl, nil
 }
 
-// Get Slot number from slot object
+// GetNumber get slot number from slot object
 //  @params: (void)
 //      number: string
 //  @return:
 //		number: Index
-
-func (this *Slot) GetNumber() Index {
-	return this.Number
+func (sl *Slot) GetNumber() ptypes.Index {
+	return sl.Number
 }
 
-// Help to check the slot is valid or not
+// IsValid help to check the slot is valid or not
 // Mainly check slot number allocated or not
 //  @return:
 //		flag: bool
-
-func (this *Slot) IsValid() bool {
-	return this.Number >= SlotNumberLowerLimit
+func (sl *Slot) IsValid() bool {
+	return sl.Number >= SlotNumberLowerLimit
 }
 
-// Help to check the slot number is valid or not
+// IsValidSlotNumber help to check the slot number is valid or not
 //  @return:
 //		flag : bool
-
-func IsValidSlotNumber(Number Index)  bool {
+func IsValidSlotNumber(Number ptypes.Index)  bool {
 	return (Number >= SlotNumberLowerLimit)
 }
 
-// Set a vehicle object to slot, so that slow will be used
+// Allocate set a vehicle object to slot, so that slow will be used
 // Slot without valid slot number should show error
 // Already using slot should not reused until slot is free
 //  @params:
 //      vehicle: Vehicle
 //  @return:
-//		err: error
 //		Slot: *Object
-
-func (this *Slot) Allocate(vehicle *vehicle.Vehicle) (error, *Slot) {
-	if !this.IsValid() {
-		return ErrVehicleAssignInvalidSlot, this
+//		err: error
+func (sl *Slot) Allocate(vehicle *vehicle.Vehicle) (*Slot, error) {
+	if !sl.IsValid() {
+		return sl, perror.ErrVehicleAssignInvalidSlot
 	}
 	
-	if nil != this.Vehicle {
-		return ErrSlotAlreadyAllocated, this
+	if nil != sl.Vehicle {
+		return sl, perror.ErrSlotAlreadyAllocated
 	}
-	this.Vehicle = vehicle
-	return nil, this
+	sl.Vehicle = vehicle
+	return sl, nil
 }
 
-// Get vehicle object from allocated slot.
+// GetVehicle get vehicle object from allocated slot.
 //  @return:
 //		err: error
 //		vehicle: *Vehicle
-
-func (this *Slot) GetVehicle() *vehicle.Vehicle {
-	return this.Vehicle
+func (sl *Slot) GetVehicle() *vehicle.Vehicle {
+	return sl.Vehicle
 }
 
-// Remove vehicle object from slot
+// Free remove vehicle object from slot
 //  @return:
 //		Slot: *Object
-
-func (this *Slot) Free() *Slot {
-	this.Vehicle = nil
-	return this
+func (sl *Slot) Free() *Slot {
+	sl.Vehicle = nil
+	return sl
 }
 
-// Verifies that slot is free or not, if no vehicle allocated
+// IsFree Verifies that slot is free or not, if no vehicle allocated
 // then vehicle property will be nil
 //  @return:
 //		isFree: bool
-
-func (this *Slot) IsFree() bool {
-	return this.Vehicle == nil
+func (sl *Slot) IsFree() bool {
+	return sl.Vehicle == nil
 }
 

@@ -1,66 +1,70 @@
-/*
-create_parking_lot
-park
-leave
-status
-registration_numbers_for_cars_with_colour
-slot_numbers_for_cars_with_colour
-slot_number_for_registration_number
-*/
+// Copyright 2017 Krishna Kumar. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 
+// Package commands base command features
+// GetName, Clear, Parse, Verify, Run
 package commands
 
 import (
 	"fmt"
+	"perror"
 	"strings"
-	. "perror"
 )
-
+// ICommand for base command's required behaviour
 type ICommand interface {
 	Help()
 	GetName() string
 	Parse(string) error
 	Verify() error
-	Run() (error, string)
+	Run() (string, error)
 	Clear()
 }
 
+// Command object structure
 type Command struct {
 	Cmd,
 	InputArgs string
-	OutPut     string
-	Args []string
+	OutPut string
+	Args   []string
 }
 
+// NewCommand to create command instance
 func NewCommand() *Command {
-	var cmd *Command = new(Command)
+	var cmd = new(Command)
 	return cmd
 }
 
-func (this *Command) Help() {
+// Help to show usage
+func (c *Command) Help() {
 	fmt.Println("No help found")
 }
 
-func (this *Command) GetName() string {
-	return this.Cmd
+// GetName to get the command name
+func (c *Command) GetName() string {
+	return c.Cmd
 }
 
-func (this *Command) Clear() {
-	this.InputArgs = Empty
-	this.Args = []string{}
-	this.OutPut = Empty
+// Clear to clear the history data
+func (c *Command) Clear() {
+	c.InputArgs = perror.Empty
+	c.Args = []string{}
+	c.OutPut = perror.Empty
 }
 
-func (this *Command) Parse(argString string) error {
-	this.InputArgs = argString
-	this.Args  = strings.Split(argString, " ")
+// Parse to help command to parse arguments from input string
+func (c *Command) Parse(argString string) error {
+	c.InputArgs = argString
+	c.Args = strings.Split(argString, perror.Space)
 	return nil
 }
 
-func (this *Command) Verify() error {
+// Verify the provided Arguments
+func (c *Command) Verify() error {
 	return nil
 }
 
-func (this *Command) Run() (error, string) {
-	return nil, this.OutPut
+// Run the command with arguments
+func (c *Command) Run() (string, error) {
+	return c.OutPut, nil
 }

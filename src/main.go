@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	cmdStrings := []string {
+	cmdStrings := []string{
 		"create_parking_lot 6",
 		"park KA-01-HH-1234 White",
 		"park KA-01-HH-9999 White",
@@ -26,16 +26,17 @@ func main() {
 		"slot_number_for_registration_number KA-01-HH-3141",
 		"slot_number_for_registration_number MH-04-AY-1111",
 	}
-	cmdMgr := commands.NewCommandManager()
+	cmdMgr := commands.NewManager()
 	for _, cmd := range cmdStrings {
 		err, out := cmdMgr.Run(cmd)
 		fmt.Println(out, err)
 	}
 }
+
 /*
 
 mgr := New()
-	
+
 	err, out := mgr.Run("park test")
 	fmt.Println(err, out)
 

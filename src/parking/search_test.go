@@ -42,7 +42,7 @@ func TestParkingCenter_ReportFreeSlots(t *testing.T) {
 
 func TestParkingCenter_ReportVehicleByColor(t *testing.T) {
 	AddDataForSearch()
-	oSlots := pC.ReportVehicleByColor(tVehicle.GetColour())
+	oSlots, _ := pC.ReportVehicleByColor(tVehicle.GetColour())
 	if 1 != len(oSlots) {
 		t.Error(NoColor12)
 	} else if oSlots[0].Vehicle.Color != tVehicle.GetColour() {
@@ -52,7 +52,7 @@ func TestParkingCenter_ReportVehicleByColor(t *testing.T) {
 
 func TestParkingCenter_ReportVehicleByNumber(t *testing.T) {
 	AddDataForSearch()
-	oSlots := pC.ReportVehicleByNumber(tVehicle.GetNumber())
+	oSlots, _ := pC.ReportVehicleByNumber(tVehicle.GetNumber())
 	if 1 != len(oSlots) {
 		t.Error(NoNumber12)
 	} else if oSlots[0].Vehicle.GetNumber() != tVehicle.GetNumber() {

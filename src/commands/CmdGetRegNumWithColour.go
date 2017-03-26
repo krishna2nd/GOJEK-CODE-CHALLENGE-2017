@@ -1,44 +1,56 @@
+// Copyright 2017 Krishna Kumar. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+// Package commands with 'registration_numbers_for_cars_with_colour'
+// command implementation
 package commands
 
 import (
 	"fmt"
-	. "perror"
-	"strings"
+	"perror"
 	"store"
+	"strings"
 )
 
+// CmdGetRegNumWithColour defined arguments and related methods
 type CmdGetRegNumWithColour struct {
 	Command
 	Color string
 }
 
+// NewCmdGetRegNumWithColour new command instance
 func NewCmdGetRegNumWithColour() *CmdGetRegNumWithColour {
-	var cmd *CmdGetRegNumWithColour = new(CmdGetRegNumWithColour)
+	var cmd = new(CmdGetRegNumWithColour)
 	cmd.Cmd = "registration_numbers_for_cars_with_colour"
 	return cmd
 }
 
-func (this *CmdGetRegNumWithColour) Help() {
+// Help to print command help information
+func (crc *CmdGetRegNumWithColour) Help() {
 	fmt.Println("No help found")
 }
 
-func (this *CmdGetRegNumWithColour) Parse(argString string) error {
-	this.Command.Parse(argString);
-	this.Color = this.Args[0];
+// Parse to parse arguments
+func (crc *CmdGetRegNumWithColour) Parse(argString string) error {
+	crc.Command.Parse(argString)
+	crc.Color = crc.Args[0]
 	return nil
 }
 
-func (this *CmdGetRegNumWithColour) Verify() error {
-	if Empty == this.Color {
-		return ErrInvalidParams
+// Verify to check the provided parameters are valid or not
+func (crc *CmdGetRegNumWithColour) Verify() error {
+	if perror.Empty == crc.Color {
+		return perror.ErrInvalidParams
 	}
 	return nil
 }
 
-func (this *CmdGetRegNumWithColour) Run() (error, string) {
-	var outPutList = []string {}
-	pC := store.Get().GetParkingCenter();
-	err, slots := pC.ReportVehicleByColor(this.Color)
+// Run to execute the command and provide result
+func (crc *CmdGetRegNumWithColour) Run() (string, error) {
+	var outPutList = []string{}
+	pC := store.Get().GetParkingCenter()
+	slots, err := pC.ReportVehicleByColor(crc.Color)
 	if nil == err {
 		for _, s := range slots {
 			v := s.GetVehicle()
@@ -48,8 +60,8 @@ func (this *CmdGetRegNumWithColour) Run() (error, string) {
 			)
 		}
 	} else {
-		outPutList = []string { err.Error() }
+		outPutList = []string{err.Error()}
 	}
-	this.OutPut = strings.Join(outPutList, Comma)
-	return err, this.OutPut
+	crc.OutPut = strings.Join(outPutList, perror.Comma)
+	return crc.OutPut, err
 }

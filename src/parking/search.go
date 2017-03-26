@@ -1,40 +1,50 @@
+// Copyright 2017 Krishna Kumar. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+// Package parking manages the complete logic of a parking center
+// Search, Status Report etc. are implemented here
 package parking
 
 import (
-	. "perror"
-	. "ptypes"
+	"perror"
+	"ptypes"
 	"slot"
 )
 
-func (this *ParkingCenter) ReportVehicleByColor(number string) (error, []*slot.Slot) {
-	err, oSlots := this.GetSlotsBy("color", number)
-	if Zero == len(oSlots) {
-		err = ErrNotFound
+// ReportVehicleByColor Get filled slots with vehicle colour
+func (pc *Center) ReportVehicleByColor(number string) ([]*slot.Slot, error) {
+	oSlots, err := pc.GetSlotsBy("color", number)
+	if perror.Zero == len(oSlots) {
+		err = perror.ErrNotFound
 	}
-	return err, oSlots
+	return oSlots, err
 }
 
-func (this *ParkingCenter) ReportVehicleByNumber(number string) (error, []*slot.Slot) {
-	err, oSlots := this.GetSlotsBy("number", number)
-	if Zero == len(oSlots) {
-		err = ErrNotFound
+// ReportVehicleByNumber Get filled slots with vehicle number
+func (pc *Center) ReportVehicleByNumber(number string) ([]*slot.Slot, error) {
+	oSlots, err := pc.GetSlotsBy("number", number)
+	if perror.Zero == len(oSlots) {
+		err = perror.ErrNotFound
 	}
-	return err, oSlots
+	return oSlots, err
 }
 
-func (this *ParkingCenter) ReportFreeSlots() []*slot.Slot {
-	return this.getAllFreeSlot()
+// ReportFreeSlots Get all free slots in center
+func (pc *Center) ReportFreeSlots() []*slot.Slot {
+	return pc.getAllFreeSlot()
 }
 
-func (this *ParkingCenter) ReportFilledSlots() (error, []*slot.Slot) {
+// ReportFilledSlots Get all filled slots
+func (pc *Center) ReportFilledSlots() ([]*slot.Slot, error) {
 	allocSlots := make([]*slot.Slot, 0)
-	if Index(Zero) == this.Counter {
-		return ErrNoFilledSlots, nil
+	if ptypes.Index(perror.Zero) == pc.Counter {
+		return nil, perror.ErrNoFilledSlots
 	}
-	for _, s := range this.slots {
+	for _, s := range pc.slots {
 		if !s.IsFree() {
 			allocSlots = append(allocSlots, s)
 		}
 	}
-	return nil, allocSlots
+	return  allocSlots, nil
 }

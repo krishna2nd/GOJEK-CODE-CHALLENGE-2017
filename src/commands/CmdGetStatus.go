@@ -1,45 +1,56 @@
+// Copyright 2017 Krishna Kumar. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+// Package commands with 'status' command implementation
 package commands
 
 import (
 	"fmt"
-	"strings"
+	"perror"
 	"store"
-	. "perror"
+	"strings"
 )
 
+// CmdGetStatus defined arguments and related methods
 type CmdGetStatus struct {
 	Command
 }
 
+// NewCmdGetStatus new status command instance
 func NewCmdGetStatus() *CmdGetStatus {
-	var cmd *CmdGetStatus = new(CmdGetStatus)
+	var cmd  = new(CmdGetStatus)
 	cmd.Cmd = "status"
 	return cmd
 }
 
-func (this *CmdGetStatus) Help() {
+// Help to print help of status command
+func (st *CmdGetStatus) Help() {
 	fmt.Println("No help found")
 }
 
-func (this *CmdGetStatus) Parse(argString string) error {
-	this.Command.Parse(argString);
+// Parse to parse arguments
+func (st *CmdGetStatus) Parse(argString string) error {
+	st.Command.Parse(argString)
 	return nil
 }
 
-func (this *CmdGetStatus) Verify() error {
+// Verify to check the provided parameters are valid or not
+func (st *CmdGetStatus) Verify() error {
 	return nil
 }
 
-func (this *CmdGetStatus) Run() (error, string) {
-	var outPutList = []string {
+// Run to execute the command and provide result
+func (st *CmdGetStatus) Run() (string, error) {
+	var outPutList = []string{
 		fmt.Sprintf("%-12s%-20s%-10s",
 			"Slot No.",
 			"Registration No",
 			"Colour",
 		),
 	}
-	pC := store.Get().GetParkingCenter();
-	err, slots := pC.ReportFilledSlots()
+	pC := store.Get().GetParkingCenter()
+	slots, err := pC.ReportFilledSlots()
 	if nil == err {
 		for _, s := range slots {
 			v := s.GetVehicle()
@@ -53,12 +64,12 @@ func (this *CmdGetStatus) Run() (error, string) {
 				),
 			)
 		}
-		this.OutPut = strings.Join(outPutList, NewLine)
+		st.OutPut = strings.Join(outPutList, perror.NewLine)
 	} else {
 		outPutList = append(
 			outPutList,
 			"No Data Found",
 		)
 	}
-	return nil, this.OutPut
+	return st.OutPut, nil
 }

@@ -21,8 +21,8 @@ func testVehicle(index Index) *vehicle.Vehicle {
 	strIndex := FormatUint(uint64(index), 10)
 	return vehicle.New("KL "+strIndex, "Color "+strIndex)
 }
-func addCheck(index Index, pC *ParkingCenter, t *testing.T) {
-	err, oSlot := pC.AddVehicle(testVehicle(index))
+func addCheck(index Index, pC *Center, t *testing.T) {
+	oSlot, err := pC.AddVehicle(testVehicle(index))
 	if nil != err {
 		t.Error(Nil)
 	}
@@ -31,9 +31,9 @@ func addCheck(index Index, pC *ParkingCenter, t *testing.T) {
 	}
 }
 
-func removeNoErr(index Index, pC *ParkingCenter, t *testing.T) {
+func removeNoErr(index Index, pC *Center, t *testing.T) {
 	strIndex := FormatUint(uint64(index), 10)
-	err, oSlots := pC.RemoveVehicleByNumber("KL " + strIndex)
+	oSlots, err := pC.RemoveVehicleByNumber("KL " + strIndex)
 	if nil != err {
 		t.Error(NoErr)
 	}
@@ -43,8 +43,8 @@ func removeNoErr(index Index, pC *ParkingCenter, t *testing.T) {
 	}
 }
 
-func addOverFlowCheck(index Index, pC *ParkingCenter, t *testing.T) {
-	err, oSlot := pC.AddVehicle(testVehicle(index))
+func addOverFlowCheck(index Index, pC *Center, t *testing.T) {
+	oSlot, err := pC.AddVehicle(testVehicle(index))
 	if nil != oSlot {
 		t.Error(Nil)
 	}
@@ -53,7 +53,7 @@ func addOverFlowCheck(index Index, pC *ParkingCenter, t *testing.T) {
 	}
 }
 
-func TestParkingCenter_Functional(t *testing.T) {
+func TestCenter_Functional(t *testing.T) {
 	var (
 		start           Index    = 1
 		index, capacity Capacity = 0, 100
@@ -79,7 +79,7 @@ func TestParkingCenter_Functional(t *testing.T) {
 
 }
 
-func BenchmarkParkingCenter_AddVehicle(b *testing.B) {
+func BenchmarkCenter_AddVehicle(b *testing.B) {
 	var (
 		start           Index    = 10000
 		index, capacity Capacity = 0, 10000000000000
@@ -90,7 +90,7 @@ func BenchmarkParkingCenter_AddVehicle(b *testing.B) {
 	}
 }
 
-func BenchmarkParkingCenter_AddAndRemove(b *testing.B) {
+func BenchmarkCenter_AddAndRemove(b *testing.B) {
 	var (
 		start           Index    = 10000
 		index, capacity Capacity = 0, 100000000000

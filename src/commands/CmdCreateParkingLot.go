@@ -1,59 +1,70 @@
+// Copyright 2017 Krishna Kumar. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+// Package commands with 'create_parking_lot' command implementation
 package commands
 
 import (
-	"fmt"
-	"store"
-	"parking"
-	"strconv"
 	"config"
-	. "ptypes"
-	. "perror"
+	"fmt"
+	"parking"
+	"perror"
+	"ptypes"
+	"store"
+	"strconv"
 )
 
+// CmdCreateParkingLot defined arguments and related methods
 type CmdCreateParkingLot struct {
 	Command
-	Capacity Capacity
+	Capacity ptypes.Capacity
 }
 
+// NewCmdCreateParkingLot new command instance
 func NewCmdCreateParkingLot() *CmdCreateParkingLot {
-	var cmd *CmdCreateParkingLot = new(CmdCreateParkingLot)
+	var cmd = new(CmdCreateParkingLot)
 	cmd.Cmd = "create_parking_lot"
 	return cmd
 }
 
-func (this *CmdCreateParkingLot) Help() {
+// Help to print command help information
+func (ccp *CmdCreateParkingLot) Help() {
 	fmt.Println("No help found")
 }
 
-func (this *CmdCreateParkingLot) Parse(argString string) error {
+// Parse to parse arguments
+func (ccp *CmdCreateParkingLot) Parse(argString string) error {
 
-	this.Command.Parse(argString);
-	if Empty != this.Args[0] {
-		val, err := strconv.ParseUint(this.Args[0], 0, 64)
+	ccp.Command.Parse(argString)
+	if perror.Empty != ccp.Args[0] {
+		val, err := strconv.ParseUint(ccp.Args[0], 0, 64)
 		if nil != err {
-			return ErrInvalidParams
+			return perror.ErrInvalidParams
 		}
-		this.Capacity = Capacity(val)
+		ccp.Capacity = ptypes.Capacity(val)
 	}
 	return nil
 }
 
-func (this *CmdCreateParkingLot) Verify() error {
-	if (1 > this.Capacity) {
-		return ErrInvalidParams
+// Verify to check the provided parameters are valid or not
+func (ccp *CmdCreateParkingLot) Verify() error {
+	if 1 > ccp.Capacity {
+		return perror.ErrInvalidParams
 	}
 	return nil
 }
 
-func (this *CmdCreateParkingLot) Run() (error, string) {
+// Run to execute the command and provide result
+func (ccp *CmdCreateParkingLot) Run() (string, error) {
 	store.Get().SetParkingCenter(
 		parking.New(config.Start,
-			this.Capacity,
+			ccp.Capacity,
 		),
 	)
-	this.OutPut = fmt.Sprintf(
+	ccp.OutPut = fmt.Sprintf(
 		"Created a parking lot with %v slots",
-		this.Capacity,
+		ccp.Capacity,
 	)
-	return nil, this.OutPut
+	return ccp.OutPut, nil
 }

@@ -1,54 +1,66 @@
+// Copyright 2017 Krishna Kumar. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+// Package commands with 'slot_numbers_for_cars_with_colour'
+// command implementation
 package commands
 
 import (
 	"fmt"
-	. "perror"
-	"strings"
+	"perror"
 	"store"
+	"strings"
 )
 
+// CmdGetSlotNumWithColour defined arguments and related methods
 type CmdGetSlotNumWithColour struct {
 	Command
 	Color string
 }
 
+// NewCmdGetSlotNumWithColour new command instance
 func NewCmdGetSlotNumWithColour() *CmdGetSlotNumWithColour {
-	var cmd *CmdGetSlotNumWithColour = new(CmdGetSlotNumWithColour)
+	var cmd = new(CmdGetSlotNumWithColour)
 	cmd.Cmd = "slot_numbers_for_cars_with_colour"
 	return cmd
 }
 
-func (this *CmdGetSlotNumWithColour) Help() {
+// Help to print command help information
+func (cgc *CmdGetSlotNumWithColour) Help() {
 	fmt.Println("No help found")
 }
 
-func (this *CmdGetSlotNumWithColour) Parse(argString string) error {
-	this.Command.Parse(argString);
-	this.Color = this.Args[0];
+// Parse to parse arguments
+func (cgc *CmdGetSlotNumWithColour) Parse(argString string) error {
+	cgc.Command.Parse(argString)
+	cgc.Color = cgc.Args[0]
 	return nil
 }
 
-func (this *CmdGetSlotNumWithColour) Verify() error {
-	if Empty == this.Color {
-		return ErrInvalidParams
+// Verify to check the provided parameters are valid or not
+func (cgc *CmdGetSlotNumWithColour) Verify() error {
+	if perror.Empty == cgc.Color {
+		return perror.ErrInvalidParams
 	}
 	return nil
 }
 
-func (this *CmdGetSlotNumWithColour) Run() (error, string) {
-	var outPutList = []string {}
-	pC := store.Get().GetParkingCenter();
-	err, slots := pC.ReportVehicleByColor(this.Color)
+// Run to execute the command and provide result
+func (cgc *CmdGetSlotNumWithColour) Run() (string, error) {
+	var outPutList = []string{}
+	pC := store.Get().GetParkingCenter()
+	slots, err := pC.ReportVehicleByColor(cgc.Color)
 	if nil == err {
 		for _, s := range slots {
 			outPutList = append(
 				outPutList,
-				fmt.Sprintf("%v",  s.GetNumber()),
+				fmt.Sprintf("%v", s.GetNumber()),
 			)
 		}
 	} else {
-		outPutList = []string { err.Error() }
+		outPutList = []string{err.Error()}
 	}
-	this.OutPut = strings.Join(outPutList, Comma)
-	return err, this.OutPut
+	cgc.OutPut = strings.Join(outPutList, perror.Comma)
+	return cgc.OutPut, err
 }
