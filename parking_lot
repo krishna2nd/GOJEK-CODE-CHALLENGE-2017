@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+export GOPATH=`pwd`
+require_go="Please install go 1.8 binaries to build"
+which go &> /dev/null
+if [ $? -eq 1 ]
+then
+    echo ${require_go}
+    exit 1
+fi;
+
+go version | grep 'go1.8' o &> /dev/null
+
+if [ $? -eq 1 ]
+then
+    echo ${require_go}
+    exit 1
+fi;
+
+go test vehicle
+go test slot
+go test parking
+go test commands
+
+go build -o bin_parking_lot src/main.go
+chmod 755 bin_parking_lot
+./bin_parking_lot "$1"
