@@ -8,9 +8,9 @@
 package slot
 
 import (
+	"perror"
 	"ptypes"
 	"vehicle"
-	"perror"
 )
 
 // SlotNumberLowerLimit is slot lower bound defined as a constant.
@@ -45,7 +45,7 @@ func (sl *Slot) init() *Slot {
 //  @return:
 //		Slot: *Object
 //		err: error
-func (sl *Slot) SetNumber(number ptypes.Index)(*Slot, error) {
+func (sl *Slot) SetNumber(number ptypes.Index) (*Slot, error) {
 	if !IsValidSlotNumber(number) {
 		return sl, perror.ErrSlotNumberInvalid
 	}
@@ -73,7 +73,7 @@ func (sl *Slot) IsValid() bool {
 // IsValidSlotNumber help to check the slot number is valid or not
 //  @return:
 //		flag : bool
-func IsValidSlotNumber(Number ptypes.Index)  bool {
+func IsValidSlotNumber(Number ptypes.Index) bool {
 	return (Number >= SlotNumberLowerLimit)
 }
 
@@ -89,7 +89,7 @@ func (sl *Slot) Allocate(vehicle *vehicle.Vehicle) (*Slot, error) {
 	if !sl.IsValid() {
 		return sl, perror.ErrVehicleAssignInvalidSlot
 	}
-	
+
 	if nil != sl.Vehicle {
 		return sl, perror.ErrSlotAlreadyAllocated
 	}
@@ -120,4 +120,3 @@ func (sl *Slot) Free() *Slot {
 func (sl *Slot) IsFree() bool {
 	return sl.Vehicle == nil
 }
-

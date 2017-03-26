@@ -6,15 +6,17 @@
 package store
 
 import (
-	"parking"
 	"config"
+	"parking"
 )
+
 // Store keeps a global reference for Parking Center
 type Store struct {
 	parkingCenter *parking.Center
 }
+
 // store : local storage
-var store *Store;
+var store *Store
 
 // New : New store instance can be created
 //  Singleton instance creation and return
@@ -43,34 +45,33 @@ func NewStore() *Store {
 //  @return:
 //		Store: *Object
 func Get() *Store {
-	return New();
+	return New()
 }
 
 // init : initialise created object
 //  @params: (void)
 //  @return:
 //		Store: *Object
-func(s *Store) init() *Store {
+func (s *Store) init() *Store {
 	s.parkingCenter = parking.New(
 		config.Start,
 		config.Capacity,
-	);
-	return s;
+	)
+	return s
 }
 
 // GetParkingCenter : Return the current parking center instance
 //  @params: (void)
 //  @return:
 //		ParkingCenter: *Object
-func(s *Store) GetParkingCenter() *parking.Center {
+func (s *Store) GetParkingCenter() *parking.Center {
 	return s.parkingCenter
 }
-
 
 // SetParkingCenter : Set new ParkingCenter object in memory
 //  @params: (void)
 //  @return:
 //		ParkingCenter: *Object
-func(s *Store) SetParkingCenter(pC *parking.Center) {
+func (s *Store) SetParkingCenter(pC *parking.Center) {
 	s.parkingCenter = pC
 }

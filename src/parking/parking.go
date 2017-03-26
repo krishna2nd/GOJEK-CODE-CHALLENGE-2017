@@ -12,6 +12,7 @@ import (
 	"slot"
 	"vehicle"
 )
+
 // Center object holds the config of all required properties
 type Center struct {
 	Capacity ptypes.Capacity
@@ -26,6 +27,7 @@ func New(start ptypes.Index, capacity ptypes.Capacity) *Center {
 	return new(Center).
 		init(start, capacity)
 }
+
 // init parking center instance
 func (pc *Center) init(
 	start ptypes.Index,
@@ -141,9 +143,9 @@ func (pc *Center) RemoveVehicleBySlotNumber(Number ptypes.Index) (*slot.Slot, er
 
 // GetSlot from center slot list by vehicle number
 func (pc *Center) GetSlot(Number ptypes.Index) (*slot.Slot, error) {
-	if (Number) < (ptypes.Index(pc.Capacity) + pc.startIndex) &&
+	if (Number) < (ptypes.Index(pc.Capacity)+pc.startIndex) &&
 		Number >= pc.startIndex {
-		return pc.slots[Number - pc.startIndex], nil
+		return pc.slots[Number-pc.startIndex], nil
 	}
 	return nil, perror.ErrInvalidGetSlotNumber
 }

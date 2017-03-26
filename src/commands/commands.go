@@ -10,6 +10,7 @@ import (
 	"perror"
 	"strings"
 )
+
 // IManager should have behaviour run and a base parse
 type IManager interface {
 	Parse() error

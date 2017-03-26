@@ -19,7 +19,7 @@ type CmdGetStatus struct {
 
 // NewCmdGetStatus new status command instance
 func NewCmdGetStatus() *CmdGetStatus {
-	var cmd  = new(CmdGetStatus)
+	var cmd = new(CmdGetStatus)
 	cmd.Cmd = "status"
 	return cmd
 }

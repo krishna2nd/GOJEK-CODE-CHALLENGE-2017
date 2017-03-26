@@ -11,6 +11,7 @@ import (
 	"perror"
 	"strings"
 )
+
 // ICommand for base command's required behaviour
 type ICommand interface {
 	Help()

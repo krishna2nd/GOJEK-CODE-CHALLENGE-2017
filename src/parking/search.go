@@ -46,5 +46,5 @@ func (pc *Center) ReportFilledSlots() ([]*slot.Slot, error) {
 			allocSlots = append(allocSlots, s)
 		}
 	}
-	return  allocSlots, nil
+	return allocSlots, nil
 }
