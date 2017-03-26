@@ -76,7 +76,6 @@ func (this *ParkingCenter) AddVehicle(vehicle *vehicle.Vehicle) (error, *slot.Sl
 	)
 
 	err, objSlot = this.getFreeSlot()
-
 	if err == nil && objSlot != nil {
 		err, objSlot = objSlot.Allocate(vehicle)
 		if err == nil {
@@ -109,6 +108,25 @@ func (this *ParkingCenter) RemoveVehicleByNumber(number string) (error, []*slot.
 		this.remove(v)
 	}
 	return nil, oSlots
+}
+
+func (this *ParkingCenter) RemoveVehicleBySlotNumber(Number Index) (error, *slot.Slot) {
+	err, oSlot := this.GetSlot(Number)
+	if nil != err {
+		return err, oSlot
+	}
+	
+	this.remove(oSlot)
+	
+	return nil, oSlot
+}
+
+func (this *ParkingCenter) GetSlot(Number Index) (error, *slot.Slot) {
+	if (Number) < (Index(this.Capacity) + this.startIndex) &&
+		Number >= this.startIndex {
+		return nil, this.slots[Number - this.startIndex]
+	}
+	return ErrInvalidGetSlotNumber, nil
 }
 
 func (this *ParkingCenter) GetSlotsBy(property, value string) (error, []*slot.Slot) {

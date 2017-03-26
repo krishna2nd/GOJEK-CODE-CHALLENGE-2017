@@ -11,7 +11,7 @@ package slot
 import (
 	. "ptypes"
 	"vehicle"
-	"perror"
+	. "perror"
 )
 
 // Slot lower boundry defined as a constant.
@@ -48,20 +48,38 @@ func (this *Slot) init() *Slot {
 //		Slot: *Object
 
 func (this *Slot) SetNumber(number Index) (error, *Slot) {
-	if number < SlotNumberLowerLimit {
-		return perror.ErrSlotNumberInvalid, this
+	if !IsValidSlotNumber(number) {
+		return ErrSlotNumberInvalid, this
 	}
 	this.Number = number
 	return nil, this
 }
 
+// Get Slot number from slot object
+//  @params: (void)
+//      number: string
+//  @return:
+//		number: Index
+
+func (this *Slot) GetNumber() Index {
+	return this.Number
+}
+
 // Help to check the slot is valid or not
 // Mainly check slot number allocated or not
 //  @return:
-//		err: bool
+//		flag: bool
 
 func (this *Slot) IsValid() bool {
 	return this.Number >= SlotNumberLowerLimit
+}
+
+// Help to check the slot number is valid or not
+//  @return:
+//		flag : bool
+
+func IsValidSlotNumber(Number Index)  bool {
+	return (Number >= SlotNumberLowerLimit)
 }
 
 // Set a vehicle object to slot, so that slow will be used
@@ -75,11 +93,11 @@ func (this *Slot) IsValid() bool {
 
 func (this *Slot) Allocate(vehicle *vehicle.Vehicle) (error, *Slot) {
 	if !this.IsValid() {
-		return perror.ErrVehicleAssignInvalidSlot, this
+		return ErrVehicleAssignInvalidSlot, this
 	}
 	
 	if nil != this.Vehicle {
-		return perror.ErrSlotAlreadyAllocated, this
+		return ErrSlotAlreadyAllocated, this
 	}
 	this.Vehicle = vehicle
 	return nil, this
