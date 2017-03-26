@@ -38,11 +38,11 @@ func TestSlot_SetNumber(t *testing.T) {
 	)
 
 	s = New()
-	err, _ = s.SetNumber(0)
+	_, err = s.SetNumber(0)
 	if err == nil {
 		t.Error(InvalidSlotNumber)
 	}
-	err, _ = s.SetNumber(SlotNumberLowerLimit)
+	_, err = s.SetNumber(SlotNumberLowerLimit)
 	if err != nil {
 		t.Error(ValidSlotError)
 	}
@@ -53,19 +53,19 @@ func TestSlot_Allocate(t *testing.T) {
 
 	for _, o := range slots {
 		s = New()
-		err, _ := s.Allocate(o.Vehicle)
+		_, err := s.Allocate(o.Vehicle)
 		if err != perror.ErrVehicleAssignInvalidSlot {
 			t.Error(ErrSlotInvalid)
 		}
 
-		err, _ = s.SetNumber(o.Number)
+		_, err = s.SetNumber(o.Number)
 		if o.Number < SlotNumberLowerLimit {
 			if err != perror.ErrSlotNumberInvalid {
 				t.Error(ErrSlotInvNum)
 			}
 		}
 
-		err, _ = s.Allocate(o.Vehicle)
+		_, err = s.Allocate(o.Vehicle)
 
 		if o.Number < SlotNumberLowerLimit {
 			if err != perror.ErrVehicleAssignInvalidSlot {
@@ -78,7 +78,7 @@ func TestSlot_Allocate(t *testing.T) {
 		}
 
 		if !s.IsFree() {
-			err, _ = s.Allocate(o.Vehicle)
+			_, err = s.Allocate(o.Vehicle)
 			if err != perror.ErrSlotAlreadyAllocated {
 				t.Error(ErrSlotAlloc)
 			}

@@ -40,20 +40,22 @@ func NewManager() *Manager {
 
 // Register Command registration with manager
 func (cm *Manager) Register(cmd ICommand) {
-	cmdName := cmd.GetName()
+	cmdName := strings.ToLower(cmd.GetName())
 	cm.Commands[cmdName] = cmd
 }
 
 // IsValidCommad verifies the requested command is valid or not
 func (cm *Manager) IsValidCommad(cmdName string) bool {
+	cmdName = strings.ToLower(cmdName)
 	_, ok := cm.Commands[cmdName]
 	return ok
 }
 
 // Parse requested command and arguments
 func (cm *Manager) Parse(cmdString string) error {
+	cmdString = strings.Trim(cmdString, " \n\t")
 	results := strings.SplitN(cmdString, perror.Space, 2)
-	cm.cmd = results[0]
+	cm.cmd = strings.ToLower(results[0])
 	if len(results) > 1 {
 		cm.argString = results[1]
 	}
@@ -74,7 +76,7 @@ func (cm *Manager) Run(cmdString string) (string, error) {
 		cmd.Clear()
 		err := cmd.Parse(cm.argString)
 		if nil != err {
-			return perror.Empty, perror.ErrCommandParsing
+			return perror.Empty, perror.ErrInvalidParams
 		}
 		if nil == cmd.Verify() {
 			return cmd.Run()

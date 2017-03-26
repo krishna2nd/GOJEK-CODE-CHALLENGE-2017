@@ -48,6 +48,11 @@ func (st *CmdGetStatus) Run() (string, error) {
 			"Registration No",
 			"Colour",
 		),
+		fmt.Sprintf("%-12v%-20v%-10v",
+			"------------",
+			"--------------------",
+			"----------",
+		),
 	}
 	pC := store.Get().GetParkingCenter()
 	slots, err := pC.ReportFilledSlots()
@@ -64,12 +69,11 @@ func (st *CmdGetStatus) Run() (string, error) {
 				),
 			)
 		}
-		st.OutPut = strings.Join(outPutList, perror.NewLine)
 	} else {
-		outPutList = append(
-			outPutList,
+		outPutList = []string{
 			"No Data Found",
-		)
+		}
 	}
+	st.OutPut = strings.Join(outPutList, perror.NewLine)
 	return st.OutPut, nil
 }

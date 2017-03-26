@@ -35,7 +35,6 @@ func (ccp *CmdCreateParkingLot) Help() {
 
 // Parse to parse arguments
 func (ccp *CmdCreateParkingLot) Parse(argString string) error {
-
 	ccp.Command.Parse(argString)
 	if perror.Empty != ccp.Args[0] {
 		val, err := strconv.ParseUint(ccp.Args[0], 0, 64)
@@ -57,14 +56,17 @@ func (ccp *CmdCreateParkingLot) Verify() error {
 
 // Run to execute the command and provide result
 func (ccp *CmdCreateParkingLot) Run() (string, error) {
-	store.Get().SetParkingCenter(
-		parking.New(config.Start,
-			ccp.Capacity,
-		),
-	)
-	ccp.OutPut = fmt.Sprintf(
-		"Created a parking lot with %v slots",
+	pc := parking.New(config.Start,
 		ccp.Capacity,
 	)
+	if nil != pc {
+		store.Get().SetParkingCenter(pc)
+		ccp.OutPut = fmt.Sprintf(
+			"Created a parking lot with %v slots",
+			ccp.Capacity,
+		)
+	} else {
+		ccp.OutPut = perror.ErrCreateParkingCenter.Error()
+	}
 	return ccp.OutPut, nil
 }

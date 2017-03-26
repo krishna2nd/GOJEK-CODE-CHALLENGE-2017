@@ -55,6 +55,8 @@ func (cp *CmdPark) Run() (string, error) {
 			"Allocated slot number: %v",
 			oSlot.GetNumber(),
 		)
+	} else {
+		cp.OutPut = err.Error()
 	}
 	return cp.OutPut, err
 }

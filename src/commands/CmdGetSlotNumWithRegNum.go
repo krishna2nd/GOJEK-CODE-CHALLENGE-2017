@@ -61,7 +61,9 @@ func (cgs *CmdGetSlotNumWithRegNum) Run() (string, error) {
 			)
 		}
 	} else {
-		outPutList = []string{err.Error()}
+		outPutList = []string{
+			err.Error(),
+		}
 	}
 	cgs.OutPut = strings.Join(outPutList, perror.Comma)
 	return cgs.OutPut, err

@@ -60,7 +60,9 @@ func (crc *CmdGetRegNumWithColour) Run() (string, error) {
 			)
 		}
 	} else {
-		outPutList = []string{err.Error()}
+		outPutList = []string{
+			err.Error(),
+		}
 	}
 	crc.OutPut = strings.Join(outPutList, perror.Comma)
 	return crc.OutPut, err

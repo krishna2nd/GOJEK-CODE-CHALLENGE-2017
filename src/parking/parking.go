@@ -35,6 +35,9 @@ func (pc *Center) init(
 	pc.Capacity = capacity
 	pc.allocationIndex = 0
 	pc.startIndex = start
+	defer func() {
+		recover()
+	}()
 	pc.slots = make([]*slot.Slot, uint64(capacity))
 	for idx := range pc.slots {
 		pc.slots[idx] = slot.New()

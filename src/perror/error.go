@@ -11,6 +11,7 @@ import "errors"
 // DO NOT EDIT
 var (
 	ErrParkingUnExpected        = errors.New("parking: Some unexpected error occured")
+	ErrCreateParkingCenter      = errors.New("parking: Some unexpected error while creating parking lot")
 	ErrInvalidParkingCapacity   = errors.New("parking: You cannot create a very parking slot with this capacity")
 	ErrParkingFullCapacity      = errors.New("Sorry, parking lot is full")
 	ErrSlotNumberInvalid        = errors.New("slot: Please provide valid slot number 1 or greater")
@@ -32,4 +33,5 @@ var (
 	NewLine = "\n"
 	Zero    = 0
 	Comma   = ", "
+	EndLine = '\n'
 )
