@@ -27,8 +27,10 @@ func NewCmdGetSlotNumWithColour() *CmdGetSlotNumWithColour {
 }
 
 // Help to print command help information
-func (cgc *CmdGetSlotNumWithColour) Help() {
-	fmt.Println("No help found")
+func (cgc *CmdGetSlotNumWithColour) Help() string {
+	return `🔸  slot_numbers_for_cars_with_colour <colour>
+	Fetch all slot numbers of cars with known colour
+	Eg: slot_numbers_for_cars_with_colour White`
 }
 
 // Parse to parse arguments

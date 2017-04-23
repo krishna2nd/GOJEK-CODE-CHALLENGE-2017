@@ -27,8 +27,10 @@ func NewCmdGetSlotNumWithRegNum() *CmdGetSlotNumWithRegNum {
 }
 
 // Help to print command help information
-func (cgs *CmdGetSlotNumWithRegNum) Help() {
-	fmt.Println("No help found")
+func (cgs *CmdGetSlotNumWithRegNum) Help() string {
+	return `🔸  slot_number_for_registration_number <registration number>
+	Search for slot number using vehicle registration number
+	Eg: slot_number_for_registration_number KA-01-HH-3141`
 }
 
 // Parse to parse arguments

@@ -28,8 +28,10 @@ func NewCmdLeave() *CmdLeave {
 }
 
 // Help to print help of leave command
-func (cl *CmdLeave) Help() {
-	fmt.Println("No help found")
+func (cl *CmdLeave) Help() string {
+	return `🔸  leave <slot number>
+	Remove vehicle from parking slot, slot will be freed
+	Eg: leave 4`;
 }
 
 // Parse to parse arguments

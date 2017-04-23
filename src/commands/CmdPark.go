@@ -26,8 +26,10 @@ func NewCmdPark() *CmdPark {
 }
 
 // Help to print help of park command
-func (cp *CmdPark) Help() {
-	fmt.Println("No help found")
+func (cp *CmdPark) Help() string {
+	return `🔸  park <vehicle registrion number> <colour>
+	Park vehicle in slot number, provided registration number, colour
+	Eg: park KA-01-HH-1234 White`
 }
 
 // Parse to parse arguments

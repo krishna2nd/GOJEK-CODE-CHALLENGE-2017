@@ -28,9 +28,11 @@ func NewCmdCreateParkingLot() *CmdCreateParkingLot {
 	return cmd
 }
 
-// Help to print command help information
-func (ccp *CmdCreateParkingLot) Help() {
-	fmt.Println("No help found")
+// Help to print help of 'create_parking_lot' command
+func (ccp *CmdCreateParkingLot) Help() string {
+	return `🔸  create_parking_lot <slots count>
+	Create parking lot slots.
+	Eg: create_parking_lot 6`
 }
 
 // Parse to parse arguments

@@ -25,8 +25,10 @@ func NewCmdGetStatus() *CmdGetStatus {
 }
 
 // Help to print help of status command
-func (st *CmdGetStatus) Help() {
-	fmt.Println("No help found")
+func (st *CmdGetStatus) Help() string   {
+	return `🔸  status
+	Fetch all current parked vehicle details and slot numbers
+	Eg: status`
 }
 
 // Parse to parse arguments

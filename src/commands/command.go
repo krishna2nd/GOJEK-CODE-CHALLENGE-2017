@@ -7,14 +7,13 @@
 package commands
 
 import (
-	"fmt"
 	"perror"
 	"strings"
 )
 
 // ICommand for base command's required behaviour
 type ICommand interface {
-	Help()
+	Help() string
 	GetName() string
 	Parse(string) error
 	Verify() error
@@ -37,8 +36,8 @@ func NewCommand() *Command {
 }
 
 // Help to show usage
-func (c *Command) Help() {
-	fmt.Println("No help found")
+func (c *Command) Help() string {
+	return "No help found"
 }
 
 // GetName to get the command name

@@ -40,7 +40,7 @@ func (sh *Shell) Process() error {
 			out, err := cmdMgr.Run(cmdInput)
 			processOutput(out, err)
 		} else {
-			fmt.Print(perror.NewLine)
+			cmdMgr.Commands["help"].Run()
 		}
 		sh.prompt()
 	}

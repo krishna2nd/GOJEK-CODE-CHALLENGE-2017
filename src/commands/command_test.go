@@ -73,3 +73,11 @@ func TestCommand_Run(t *testing.T) {
 		}
 	}
 }
+
+func TestCommand_Help(t *testing.T) {
+	for _, cmd := range mgrCmd.Commands {
+		if perror.Empty == cmd.Help() {
+			t.Fatal("Help should not be empty")
+		}
+	}
+}

@@ -23,11 +23,12 @@ type Manager struct {
 	Commands       map[string]ICommand
 }
 
+var mgrCmd = &Manager{
+	Commands: make(map[string]ICommand),
+}
+
 // NewManager return command manager
 func NewManager() *Manager {
-	mgrCmd := new(Manager)
-	mgrCmd.Commands = make(map[string]ICommand)
-
 	mgrCmd.Register(NewCmdCreateParkingLot())
 	mgrCmd.Register(NewCmdPark())
 	mgrCmd.Register(NewCmdLeave())
@@ -35,6 +36,7 @@ func NewManager() *Manager {
 	mgrCmd.Register(NewCmdGetRegNumWithColour())
 	mgrCmd.Register(NewCmdGetSlotNumWithColour())
 	mgrCmd.Register(NewCmdGetSlotNumWithRegNum())
+	mgrCmd.Register(NewCmdHelp())
 	return mgrCmd
 }
 
